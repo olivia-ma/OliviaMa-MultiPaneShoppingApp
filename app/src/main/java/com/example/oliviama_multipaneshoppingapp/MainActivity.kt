@@ -93,6 +93,8 @@ fun ProductCard(image: Int, product: String, selectedProduct: String?, onItemSel
     val isSelected = product == selectedProduct
     val borderWidth = if (isSelected) 4.dp else 1.dp
 
+    val cardHeight = if (calculateCurrentWindowInfo().isWideScreen) 50.dp else 150.dp
+
     OutlinedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface,
@@ -101,7 +103,7 @@ fun ProductCard(image: Int, product: String, selectedProduct: String?, onItemSel
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .height(150.dp)
+            .height(cardHeight)
             .clickable {
                 onItemSelected(product)
             }
@@ -121,13 +123,14 @@ fun ProductCard(image: Int, product: String, selectedProduct: String?, onItemSel
                 fontWeight = FontWeight.Bold
 
             )
-
-            Image(
-                painter = painterResource(image),
-                contentDescription=null,
-                modifier = Modifier
-                    .padding(bottom = 8.dp)
-            )
+            if (!calculateCurrentWindowInfo().isWideScreen) {
+                Image(
+                    painter = painterResource(image),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(bottom = 8.dp)
+                )
+            }
         }
     }
 }
@@ -191,16 +194,19 @@ fun ProductDetails(product: String?, products: List<Pair<String, Int>>, modifier
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         if (product != null) {
-            Image(
-                painter = painterResource(products.find {it.first == product}?.second?: 0),
-                contentDescription=null,
-                modifier = Modifier
-                    .padding(20.dp)
-                    // makes images same size on screen
-                    .height(200.dp)
-                    .fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            if (!calculateCurrentWindowInfo().isWideScreen) {
+                Image(
+                    painter = painterResource(products.find { it.first == product }?.second ?: 0),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(20.dp)
+                        // makes images same size on screen
+                        .height(200.dp)
+                        .fillMaxWidth()
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+            }
             Text(
                 text = "$product" + "s",
                 fontWeight = FontWeight.Bold,
