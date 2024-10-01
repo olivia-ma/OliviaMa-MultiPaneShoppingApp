@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.oliviama_multipaneshoppingapp.ui.theme.OliviaMaMultiPaneShoppingAppTheme
 import androidx.compose.material3.Button
+import androidx.compose.runtime.saveable.rememberSaveable
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,7 +141,7 @@ fun ProductList(products: List<Pair<String, Int>>, onItemSelected: (String) -> U
     // simple product cards displayed in a column in the products list pane
     LazyColumn (
         modifier = modifier.padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         item {
@@ -255,7 +256,8 @@ fun ShoppingApp(modifier: Modifier = Modifier) {
         Pair("Orange", R.drawable.orange),
         Pair("Pear", R.drawable.pear)
     )
-    var selectedProduct by remember { mutableStateOf<String?>(null) }
+    // ensure that the state survives configuration changes
+    var selectedProduct by rememberSaveable { mutableStateOf<String?>(null) }
 
     if (windowInfo.isWideScreen) {
         // Two-pane layout for wide screens, one for the task list
